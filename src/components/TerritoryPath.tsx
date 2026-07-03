@@ -1,5 +1,5 @@
 import type { TerritoryDef } from '../game/types';
-import { blobPoints } from '../game/mapGeometry';
+import { hexPoints } from '../game/mapGeometry';
 
 interface Props {
   def: TerritoryDef;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function TerritoryPath({ def, ownerColor, armies, isSelected, isValidTarget, onClick }: Props) {
-  const points = blobPoints(def.cx, def.cy, def.rx, def.ry, def.seed);
+  const points = hexPoints(def.cx, def.cy, def.rx, def.ry, def.seed);
   return (
     <g className="territory" onClick={onClick}>
       <polygon

@@ -1,8 +1,8 @@
 import type { TerritoryDef } from './types';
 
 // Positions are hand-placed on a 1000x600 viewBox to loosely resemble the
-// classic Risk board layout. Each territory renders as a jittered "blob"
-// polygon (see blobPoints in mapGeometry.ts) rather than a traced coastline.
+// classic Risk board layout. Each territory renders as a hexagon (see
+// hexPoints in mapGeometry.ts) rather than a traced coastline.
 export const TERRITORIES: TerritoryDef[] = [
   // North America
   { id: 'alaska', name: 'Alaska', continent: 'north-america', adjacent: ['northwest-territory', 'alberta', 'kamchatka'], cx: 70, cy: 60, rx: 34, ry: 28, seed: 1 },

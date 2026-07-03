@@ -1,4 +1,4 @@
-// Deterministic seeded PRNG (mulberry32) so blob shapes are stable across renders.
+// Deterministic seeded PRNG (mulberry32) so hexagon rotation is stable across renders.
 function mulberry32(seed: number) {
   let a = seed;
   return () => {
@@ -10,14 +10,16 @@ function mulberry32(seed: number) {
   };
 }
 
-export function blobPoints(cx: number, cy: number, rx: number, ry: number, seed: number, count = 10): string {
-  const rand = mulberry32(seed * 9973 + 17);
+// Flat-top hexagon per territory, with a small seeded rotation jitter so a
+// dense cluster doesn't look perfectly machine-tiled.
+export function hexPoints(cx: number, cy: number, rx: number, ry: number, seed: number): string {
+  const rand = mulberry32(seed * 7919 + 3);
+  const rotationJitter = (rand() - 0.5) * 0.15;
   const points: string[] = [];
-  for (let i = 0; i < count; i++) {
-    const angle = (i / count) * Math.PI * 2;
-    const jitter = 0.75 + rand() * 0.5;
-    const x = cx + Math.cos(angle) * rx * jitter;
-    const y = cy + Math.sin(angle) * ry * jitter;
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2 + Math.PI / 6 + rotationJitter;
+    const x = cx + Math.cos(angle) * rx;
+    const y = cy + Math.sin(angle) * ry;
     points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
   }
   return points.join(' ');
