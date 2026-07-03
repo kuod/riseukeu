@@ -1,0 +1,299 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #10151c;
+  color: #e8ecf1;
+  min-height: 100vh;
+}
+
+h1, h2 {
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #3a4657;
+  background: #1e2733;
+  color: #e8ecf1;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #293544;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: #2f6fd6;
+  border-color: #2f6fd6;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #3c7fe8;
+}
+
+/* Setup screen */
+.setup-screen {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 24px;
+  background: #171f2a;
+  border-radius: 12px;
+  border: 1px solid #2a3444;
+}
+
+.setup-subtitle {
+  color: #a4b0c0;
+  margin-top: 0;
+}
+
+.title-sub {
+  font-size: 0.5em;
+  font-weight: 400;
+  color: #a4b0c0;
+  letter-spacing: 0.04em;
+}
+
+.player-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.player-row {
+  display: flex;
+  gap: 8px;
+}
+
+.player-name-input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #3a4657;
+  background: #10151c;
+  color: #e8ecf1;
+}
+
+.player-row select {
+  padding: 8px;
+  border-radius: 6px;
+  background: #10151c;
+  color: #e8ecf1;
+  border: 1px solid #3a4657;
+}
+
+.remove-row {
+  padding: 4px 10px;
+}
+
+.setup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Game layout */
+.game-layout {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.map-panel {
+  flex: 1;
+  min-width: 0;
+  background: #0b1119;
+  border-radius: 12px;
+  border: 1px solid #2a3444;
+  overflow: hidden;
+}
+
+.map-board {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-background {
+  fill: #0c1a2b;
+}
+
+.side-panel {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar, .phase-panel, .card-hand, .dice-log {
+  background: #171f2a;
+  border: 1px solid #2a3444;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.player-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.player-item.active {
+  background: #202d40;
+  outline: 1px solid #3c7fe8;
+}
+
+.player-item.eliminated {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.color-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.player-name {
+  font-weight: 600;
+}
+
+.player-stats {
+  color: #a4b0c0;
+  font-size: 12px;
+  width: 100%;
+  margin-left: 22px;
+}
+
+.hint {
+  color: #a4b0c0;
+  font-size: 13px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.stepper input[type='range'] {
+  flex: 1;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+}
+
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.card-chip {
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.card-chip.selected {
+  background: #2f6fd6;
+  border-color: #2f6fd6;
+}
+
+.dice-log ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dice-log li {
+  font-size: 12px;
+  color: #a4b0c0;
+  border-bottom: 1px solid #232e3d;
+  padding-bottom: 6px;
+}
+
+/* Territory rendering */
+.territory {
+  cursor: pointer;
+}
+
+.territory polygon {
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.territory:hover polygon {
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+
+.territory-name {
+  font-size: 9px;
+  fill: #ffffff;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+.territory-armies {
+  font-size: 11px;
+  font-weight: 700;
+  fill: #fff;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .game-layout {
+    flex-direction: column;
+  }
+  .side-panel {
+    width: 100%;
+  }
+}
