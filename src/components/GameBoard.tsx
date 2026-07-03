@@ -51,7 +51,7 @@ export function GameBoard() {
     }
 
     if (state.phase === 'reinforce') {
-      if (territory.owner === player.id && state.reinforcementsRemaining > 0) {
+      if (territory.owner === player.id && state.reinforcementsRemaining > 0 && player.cards.length < 5) {
         dispatch({ type: 'REINFORCE', territoryId: id, count: 1 });
       }
       return;

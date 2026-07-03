@@ -79,9 +79,11 @@ export function PhasePanel({ state, pendingFortify, onCancelFortify }: Props) {
       <div className="phase-panel">
         <h2>Reinforce</h2>
         <p className="hint">
-          {state.reinforcementsRemaining > 0
-            ? `Place ${state.reinforcementsRemaining} more armies. Click your territories on the map.`
-            : 'All armies placed.'}
+          {player.cards.length >= 5
+            ? 'You hold 5+ cards — trade in a set below before placing armies.'
+            : state.reinforcementsRemaining > 0
+              ? `Place ${state.reinforcementsRemaining} more armies. Click your territories on the map.`
+              : 'All armies placed.'}
         </p>
       </div>
     );

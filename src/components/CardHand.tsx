@@ -33,9 +33,12 @@ export function CardHand({ state }: { state: GameState }) {
     );
   }
 
+  const mustTrade = player.cards.length >= 5;
+
   return (
     <div className="card-hand">
       <h2>Your Cards</h2>
+      {mustTrade && <p className="hint">You must trade in a set before placing armies.</p>}
       <div className="card-list">
         {player.cards.length === 0 && <p className="hint">No cards yet.</p>}
         {player.cards.map((c) => (

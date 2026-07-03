@@ -14,6 +14,14 @@ function currentPlayer(state: GameState) {
   return state.players[state.currentPlayerIndex];
 }
 
+// A hand of 5+ cards must be traded down before further reinforcement, per
+// classic Risk rules.
+const MAX_CARDS_BEFORE_FORCED_TRADE = 5;
+
+function isPositiveInt(n: unknown): n is number {
+  return typeof n === 'number' && Number.isInteger(n) && n > 0;
+}
+
 function nextAlivePlayerIndex(state: GameState, from: number): number {
   const n = state.players.length;
   for (let step = 1; step <= n; step++) {
@@ -67,6 +75,7 @@ export function applyAction(state: GameState, action: GameAction): GameState {
     case 'PLACE_ARMY': {
       if (state.phase !== 'setup-placement') return state;
       const { territoryId, playerId } = action;
+      if (playerId !== currentPlayer(state).id) return state;
       const territory = state.territories[territoryId];
       if (!territory || territory.owner !== playerId) return state;
       if ((state.setupRemaining[playerId] ?? 0) <= 0) return state;
@@ -92,9 +101,10 @@ export function applyAction(state: GameState, action: GameAction): GameState {
       if (state.phase !== 'reinforce') return state;
       const { territoryId, count } = action;
       const player = currentPlayer(state);
+      if (player.cards.length >= MAX_CARDS_BEFORE_FORCED_TRADE) return state;
       const territory = state.territories[territoryId];
       if (!territory || territory.owner !== player.id) return state;
-      if (count <= 0 || count > state.reinforcementsRemaining) return state;
+      if (!isPositiveInt(count) || count > state.reinforcementsRemaining) return state;
 
       const territories = { ...state.territories, [territoryId]: { ...territory, armies: territory.armies + count } };
       const reinforcementsRemaining = state.reinforcementsRemaining - count;
@@ -142,9 +152,13 @@ export function applyAction(state: GameState, action: GameAction): GameState {
 
     case 'ROLL_ATTACK': {
       if (state.phase !== 'attack' || !state.pendingBattle) return state;
+      if (!isPositiveInt(action.attackerDice)) return state;
       const { fromId, toId } = state.pendingBattle;
       const from = state.territories[fromId];
       const to = state.territories[toId];
+      // Battle already resolved (e.g. captured, awaiting CAPTURE_MOVE) — no
+      // further rolling until that follow-up is handled.
+      if (to.owner === currentPlayer(state).id) return state;
       const attacker = currentPlayer(state);
       const defenderId = to.owner!;
       const defender = state.players.find((p) => p.id === defenderId)!;
@@ -193,26 +207,42 @@ export function applyAction(state: GameState, action: GameAction): GameState {
     }
 
     case 'CAPTURE_MOVE': {
-      if (!state.pendingBattle) return state;
+      if (state.phase !== 'attack' || !state.pendingBattle) return state;
+      if (!isPositiveInt(action.count)) return state;
       const { fromId, toId } = state.pendingBattle;
-      if (!state.territories[fromId] || !state.territories[toId]) return state;
-      const maxMove = state.territories[fromId].armies - 1;
-      const count = Math.min(Math.max(action.count, 1), maxMove);
+      const from = state.territories[fromId];
+      const to = state.territories[toId];
+      if (!from || !to) return state;
+      const player = currentPlayer(state);
+      // Only a territory that was just actually conquered (owner flipped to
+      // the attacker, 0 armies left behind) may receive a capture-move.
+      if (from.owner !== player.id || to.owner !== player.id || to.armies !== 0) return state;
+      const maxMove = from.armies - 1;
+      const count = Math.min(action.count, maxMove);
+      if (count < 1) return state;
 
       const territories = {
         ...state.territories,
-        [fromId]: { ...state.territories[fromId], armies: state.territories[fromId].armies - count },
-        [toId]: { ...state.territories[toId], armies: count },
+        [fromId]: { ...from, armies: from.armies - count },
+        [toId]: { ...to, armies: count },
       };
       return { ...state, territories, pendingBattle: null };
     }
 
     case 'CANCEL_BATTLE': {
+      if (!state.pendingBattle) return state;
+      const { toId } = state.pendingBattle;
+      // Once a territory has actually been conquered (0 armies, owner
+      // flipped), the follow-up move is mandatory — it can't be cancelled.
+      if (state.territories[toId]?.armies === 0) return state;
       return { ...state, pendingBattle: null };
     }
 
     case 'END_ATTACK_PHASE': {
       if (state.phase !== 'attack') return state;
+      // A just-conquered territory with 0 armies must be resolved via
+      // CAPTURE_MOVE before the attack phase can end.
+      if (state.pendingBattle && state.territories[state.pendingBattle.toId]?.armies === 0) return state;
       return { ...state, phase: 'fortify', pendingBattle: null };
     }
 
@@ -223,7 +253,7 @@ export function applyAction(state: GameState, action: GameAction): GameState {
       const from = state.territories[fromId];
       const to = state.territories[toId];
       if (!from || !to || from.owner !== player.id || to.owner !== player.id) return state;
-      if (count <= 0 || count >= from.armies) return state;
+      if (!isPositiveInt(count) || count >= from.armies) return state;
       if (!isConnected(fromId, toId, player.id, state.territories)) return state;
 
       const territories = {
@@ -235,6 +265,7 @@ export function applyAction(state: GameState, action: GameAction): GameState {
     }
 
     case 'END_TURN': {
+      if (state.phase !== 'fortify') return state;
       return endTurn(state);
     }
 
