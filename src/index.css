@@ -139,6 +139,11 @@ button.primary:hover:not(:disabled) {
   fill: #0c1a2b;
 }
 
+.map-dotmap {
+  opacity: 0.22;
+  pointer-events: none;
+}
+
 .side-panel {
   width: 340px;
   flex-shrink: 0;

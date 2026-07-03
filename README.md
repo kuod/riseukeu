@@ -43,3 +43,5 @@ The game ends when one player controls all 42 territories.
 ## Tech stack
 
 React + TypeScript + Vite. Game rules and AI logic live in `src/game/` as plain, framework-free TypeScript (`reducer.ts` is the core state machine); UI components in `src/components/` dispatch actions and render state.
+
+`public/world-dotmap.svg` is a real-coastline dot-matrix backdrop (Winkel-Tripel projection, Natural Earth land data) reused from the [wc2026-bracket](https://github.com/kuod/wc2026-bracket) project's `tools/gen_dotmap.py`; it renders behind the stylized territory shapes for geographic texture.

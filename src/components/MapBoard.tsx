@@ -18,6 +18,15 @@ export function MapBoard({ state, selectedFrom, validTargets, onTerritoryClick }
   return (
     <svg viewBox="0 0 1000 600" className="map-board" role="img" aria-label="Risk world map">
       <rect x={0} y={0} width={1000} height={600} className="map-background" />
+      <image
+        href={`${import.meta.env.BASE_URL}world-dotmap.svg`}
+        x={36}
+        y={40}
+        width={869}
+        height={427}
+        className="map-dotmap"
+        aria-hidden="true"
+      />
       {TERRITORIES.map((def) => (
         <TerritoryPath
           key={def.id}
