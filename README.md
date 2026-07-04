@@ -1,5 +1,7 @@
 # 리스크 · Riseukeu
 
+**[Play it live](https://kuod.github.io/riseukeu/)**
+
 A playable clone of the board game Risk, built as a static web app. "Riseukeu" (리스크) is the Korean phonetic loanword for "risk."
 
 Play a full game of world conquest in the browser: classic 42-territory map, six continents, dice combat, territory cards, and local hotseat play against heuristic AI bots. No backend — everything runs client-side.
