@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { PhasePanel } from './PhasePanel';
 import { DiceLog } from './DiceLog';
 import { CardHand } from './CardHand';
+import { HowToPlay } from './HowToPlay';
 import { decideAiAction } from '../game/ai';
 import { isAdjacent } from '../game/map-data';
 import { isConnected } from '../game/rules';
@@ -111,21 +112,24 @@ export function GameBoard() {
   }
 
   return (
-    <div className="game-layout">
-      <div className="map-panel">
-        <MapBoard state={state} selectedFrom={selectedFrom} validTargets={validTargets} onTerritoryClick={handleTerritoryClick} />
+    <div className="game-screen">
+      <div className="game-layout">
+        <div className="map-panel">
+          <MapBoard state={state} selectedFrom={selectedFrom} validTargets={validTargets} onTerritoryClick={handleTerritoryClick} />
+        </div>
+        <div className="side-panel">
+          <Sidebar state={state} />
+          <PhasePanel state={state} pendingFortify={pendingFortify} onCancelFortify={() => setPendingFortify(null)} />
+          <CardHand state={state} />
+          <DiceLog state={state} />
+          {state.phase === 'gameover' && (
+            <button className="primary" onClick={resetGame}>
+              New Game
+            </button>
+          )}
+        </div>
       </div>
-      <div className="side-panel">
-        <Sidebar state={state} />
-        <PhasePanel state={state} pendingFortify={pendingFortify} onCancelFortify={() => setPendingFortify(null)} />
-        <CardHand state={state} />
-        <DiceLog state={state} />
-        {state.phase === 'gameover' && (
-          <button className="primary" onClick={resetGame}>
-            New Game
-          </button>
-        )}
-      </div>
+      <HowToPlay />
     </div>
   );
 }
