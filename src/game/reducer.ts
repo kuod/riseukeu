@@ -229,7 +229,10 @@ export function applyAction(state: GameState, action: GameAction): GameState {
         [fromId]: { ...from, armies: from.armies - count },
         [toId]: { ...to, armies: count },
       };
-      return { ...state, territories, pendingBattle: null };
+      const moved: GameState = { ...state, territories, pendingBattle: null };
+      const winnerId = checkWinner(moved);
+      if (winnerId) return { ...moved, phase: 'gameover', winnerId };
+      return moved;
     }
 
     case 'CANCEL_BATTLE': {
