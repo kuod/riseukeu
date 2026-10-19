@@ -18,6 +18,8 @@ Play a full game of world conquest in the browser: classic 42-territory map, six
 
 ## Getting started
 
+Requires Node.js `^20.19.0` or `>=22.12.0` (Vite 8).
+
 ```bash
 npm install
 npm run dev
@@ -32,6 +34,14 @@ npm run build
 ```
 
 Outputs static files to `dist/`, deployable to any static host (GitHub Pages, Netlify, Vercel, S3, etc.).
+
+## Development
+
+```bash
+npm run lint   # oxlint
+npm test       # vitest unit tests for game rules
+npm run build  # type-check + production build
+```
 
 ## How to play
 
