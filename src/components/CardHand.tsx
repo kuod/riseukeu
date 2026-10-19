@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { GameState } from '../game/types';
 import { isValidSet } from '../game/cards';
-import { useGame } from '../state/GameContext';
+import { useGame } from '../state/gameContextValue';
 
 export function CardHand({ state }: { state: GameState }) {
   const { dispatch } = useGame();

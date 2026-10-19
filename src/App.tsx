@@ -1,4 +1,5 @@
-import { GameProvider, useGame } from './state/GameContext';
+import { GameProvider } from './state/GameContext';
+import { useGame } from './state/gameContextValue';
 import { SetupScreen } from './components/SetupScreen';
 import { GameBoard } from './components/GameBoard';
 

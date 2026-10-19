@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { GameState } from '../game/types';
-import { useGame } from '../state/GameContext';
+import { useGame } from '../state/gameContextValue';
 import { maxAttackerDice } from '../game/combat';
 
 interface Props {
@@ -20,14 +20,15 @@ export function PhasePanel({ state, pendingFortify, onCancelFortify }: Props) {
   const battle = state.pendingBattle;
   const battleFrom = battle ? state.territories[battle.fromId] : null;
   const battleTo = battle ? state.territories[battle.toId] : null;
+  const battleFromArmies = battleFrom?.armies;
   const captured = battle && battleTo && battleTo.armies === 0 && battleTo.owner === player.id;
 
   useEffect(() => {
-    if (battleFrom) {
-      const max = maxAttackerDice(battleFrom.armies);
+    if (battleFromArmies !== undefined) {
+      const max = maxAttackerDice(battleFromArmies);
       setAttackerDice((d) => Math.min(d, Math.max(1, max)));
     }
-  }, [battleFrom?.armies]);
+  }, [battleFromArmies]);
 
   useEffect(() => {
     if (captured && battleFrom) {

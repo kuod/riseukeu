@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { PlayerType } from '../game/types';
-import { useGame } from '../state/GameContext';
+import { useGame } from '../state/gameContextValue';
 
 interface PlayerRow {
   name: string;

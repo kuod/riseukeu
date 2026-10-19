@@ -18,6 +18,8 @@ Play a full game of world conquest in the browser: classic 42-territory map, six
 
 ## Getting started
 
+Requires Node.js `^20.19.0` or `>=22.12.0` (Vite 8).
+
 ```bash
 npm install
 npm run dev
@@ -33,6 +35,14 @@ npm run build
 
 Outputs static files to `dist/`, deployable to any static host (GitHub Pages, Netlify, Vercel, S3, etc.).
 
+## Development
+
+```bash
+npm run lint   # oxlint
+npm test       # vitest unit tests for game rules
+npm run build  # type-check + production build
+```
+
 ## How to play
 
 1. **Setup** — armies are dealt automatically; click your territories to place your remaining starting armies.
@@ -47,3 +57,7 @@ The game ends when one player controls all 42 territories.
 React + TypeScript + Vite. Game rules and AI logic live in `src/game/` as plain, framework-free TypeScript (`reducer.ts` is the core state machine); UI components in `src/components/` dispatch actions and render state.
 
 `public/world-dotmap.svg` is a real-coastline dot-matrix backdrop (Winkel-Tripel projection, Natural Earth land data) reused from the [wc2026-bracket](https://github.com/kuod/wc2026-bracket) project's `tools/gen_dotmap.py`; it renders behind the stylized territory shapes for geographic texture.
+
+## License
+
+[MIT](LICENSE)
