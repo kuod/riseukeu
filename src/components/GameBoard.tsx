@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useGame } from '../state/GameContext';
+import { useGame } from '../state/gameContextValue';
 import { MapBoard } from './MapBoard';
 import { Sidebar } from './Sidebar';
 import { PhasePanel } from './PhasePanel';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { GameState } from '../game/types';
-import { useGame } from '../state/GameContext';
+import { useGame } from '../state/gameContextValue';
 import { maxAttackerDice } from '../game/combat';
 
 interface Props {
