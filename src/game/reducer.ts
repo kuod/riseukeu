@@ -139,6 +139,9 @@ export function applyAction(state: GameState, action: GameAction): GameState {
 
     case 'SELECT_ATTACK': {
       if (state.phase !== 'attack') return state;
+      // An unresolved battle (especially a conquest awaiting CAPTURE_MOVE)
+      // must be finished or cancelled first.
+      if (state.pendingBattle) return state;
       const { fromId, toId } = action;
       const player = currentPlayer(state);
       const from = state.territories[fromId];

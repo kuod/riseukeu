@@ -23,3 +23,25 @@ describe('map data', () => {
   });
 });
 
+describe('reducer', () => {
+  it('rejects SELECT_ATTACK while a conquest awaits its capture move', () => {
+    const s = twoPlayer();
+    const a = 'alaska';
+    const b = 'alberta';
+    const c = 'kamchatka';
+    const state: GameState = {
+      ...s,
+      phase: 'attack',
+      currentPlayerIndex: 0,
+      territories: {
+        ...s.territories,
+        [a]: { owner: 'player-0', armies: 5 },
+        [b]: { owner: 'player-0', armies: 0 }, // just conquered
+        [c]: { owner: 'player-1', armies: 2 },
+      },
+      pendingBattle: { fromId: a, toId: b },
+    };
+    const next = applyAction(state, { type: 'SELECT_ATTACK', fromId: a, toId: c });
+    expect(next.pendingBattle).toEqual({ fromId: a, toId: b });
+  });
+});
