@@ -3,15 +3,16 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
+# Read-only by default; the deploy job adds the Pages permissions it needs.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  # PR checks get their own group so they never cancel a production deploy.
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
   cancel-in-progress: true
 
 jobs:
@@ -21,17 +22,26 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm run lint
+      - run: npm test
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    # Never runs for pull_request.
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
