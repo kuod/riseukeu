@@ -43,6 +43,21 @@ npm test       # vitest unit tests for game rules
 npm run build  # type-check + production build
 ```
 
+## Continuous integration and deployment
+
+`.github/workflows/deploy.yml` runs on pull requests, pushes to `main`, and manual dispatch (`workflow_dispatch`). The `build` job runs, in order:
+
+```bash
+npm ci
+npm run lint
+npm test
+npm run build
+```
+
+The `deploy` job publishes `dist/` to GitHub Pages only on a push to `main` or a manual dispatch, and only after `build` passes. Pull requests run the checks but never deploy.
+
+Node is set up from `.nvmrc` (`22.12.0`), which falls inside the `engines` range in `package.json` (`^20.19.0 || >=22.12.0`).
+
 ## How to play
 
 1. **Setup** — armies are dealt automatically; click your territories to place your remaining starting armies.
